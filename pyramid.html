@@ -4,19 +4,22 @@
 <script type="text/javascript" src="pyramid.js"></script>
 </head>
 <body>
+<div>
+	<center>
+		<canvas id="Canvas" width="300" height="300" style="border:1px solid #d3d3d3;">
+		Your browser does not support the HTML5 canvas tag.</canvas>
+		<br>
 
-<canvas id="Canvas" width="300" height="300" style="border:1px solid #d3d3d3;">
-Your browser does not support the HTML5 canvas tag.</canvas>
-<br>
-
-
-<form id="myForm" action="form_action.asp">
-	Angle X: <input type="text" name="angleX" value="0"><br>
-	Angle Y: <input type="text" name="angleY" value="0"><br>
-  	Angle Z: <input type="text" name="angleZ" value="0"><br>
-</form> 
-<button onclick="myFunction()">Try it</button>
-<p id="demo"></p>
-
+		<button onmousedown="XangleP()" onmouseup="mouseUp()">X +</button>
+		<button onmousedown="XangleM()" onmouseup="mouseUp()">X -</button>
+		<button onmousedown="YangleP()" onmouseup="mouseUp()">Y +</button>
+		<button onmousedown="YangleM()" onmouseup="mouseUp()">Y -</button>
+		<button onmousedown="ZangleP()" onmouseup="mouseUp()">Z +</button>
+		<button onmousedown="ZangleM()" onmouseup="mouseUp()">Z -</button>
+		<br>
+		
+		<button onclick="Reset()">Reset</button>
+	</center>
+</div>
 </body>
 </html>
