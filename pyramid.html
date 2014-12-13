@@ -8,11 +8,15 @@
 <canvas id="Canvas" width="300" height="300" style="border:1px solid #d3d3d3;">
 Your browser does not support the HTML5 canvas tag.</canvas>
 <br>
-<button onclick="xangleP()">X +</button>
-<button onclick="xangleM()">X -</button>
-<button onclick="yangleP()">Y +</button>
-<button onclick="yangleM()">Y -</button>
-<button onclick="zangleP()">Z +</button>
-<button onclick="zangleM()">Z -</button>
+
+
+<form id="myForm" action="form_action.asp">
+	Angle X: <input type="text" name="angleX" value="0"><br>
+	Angle Y: <input type="text" name="angleY" value="0"><br>
+  	Angle Z: <input type="text" name="angleZ" value="0"><br>
+</form> 
+<button onclick="myFunction()">Try it</button>
+<p id="demo"></p>
+
 </body>
 </html>

@@ -5,19 +5,31 @@ var z_angle = 0;
 var cc; 
 var ctx;
 
-var LeftDiag = new Line(new Point3(75, 43.3/2, 0), new Point3(100, -43.3/2, 0));
-var RightDiag = new Line(new Point3(125, 43.3/2, 0), new Point3(100, -43.3/2, 0));
-var Bottom = new Line(new Point3(75, 43.3/2, 0), new Point3(125, 43.3/2, 0));
-var TopToCenter = new Line(new Point3(100, -43.3/2, 0), new Point3(100, 0, 43.3));
-var LeftToCenter = new Line(new Point3(75, 43.3/2, 0), new Point3(100, 0, 43.3));
-var RightToCenter = new Line(new Point3(125, 43.3/2, 0), new Point3(100, 0, 43.3));
+var LeftDiag = new Line(new Point3(75, 12.5, 0), new Point3(100, -30.8, 0));
+var RightDiag = new Line(new Point3(125, 12.5, 0), new Point3(100, -30.8, 0));
+var Bottom = new Line(new Point3(75, 12.5, 0), new Point3(125, 12.5, 0));
+var TopToCenter = new Line(new Point3(100, -30.8, 0), new Point3(100, 0, 43.3));
+var LeftToCenter = new Line(new Point3(75, 12.5, 0), new Point3(100, 0, 43.3));
+var RightToCenter = new Line(new Point3(125, 12.5, 0), new Point3(100, 0, 43.3));
+
+function myFunction() {
+    var x = document.getElementById("myForm").elements;
+    //document.getElementById("demo").innerHTML = x;
+    x_angle = parseInt(x[0].value);
+    y_angle = parseInt(x[1].value);
+    z_angle = parseInt(x[2].value);
+    //cc.clearRect(0, 0, canvas.width, canvas.height)
+    transforDrawing();
+    console.log(x_angle);
+    console.log(y_angle);
+    console.log(z_angle);
+    redraw();
+}
 
 window.onload = function() {
-
-	
-
 	cc = document.getElementById("Canvas");
 	ctx = cc.getContext("2d");
+	DrawOrigin();
 	DrawLine(LeftDiag, "#000000");
 	DrawLine(RightDiag, "#000000")
 	DrawLine(Bottom, "#000000");
@@ -26,16 +38,8 @@ window.onload = function() {
 	DrawLine(RightToCenter, "#000000");
 };
 
-function erase(ctx) {
-	DrawLine(LeftDiag, "#FFFFFF");
-	DrawLine(RightDiag, "#FFFFFF")
-	DrawLine(Bottom, "#FFFFFF");
-	DrawLine(TopToCenter, "#FFFFFF");
-	DrawLine(LeftToCenter, "#FFFFFF");
-	DrawLine(RightToCenter, "#FFFFFF");
-}
 
-function redraw(ctx) {
+function redraw() {
 	DrawLine(LeftDiag, "#000000");
 	DrawLine(RightDiag, "#000000")
 	DrawLine(Bottom, "#000000");
@@ -53,56 +57,6 @@ function transforDrawing() {
 	LineRotation(RightToCenter);
 }
 
-function xangleP() {
-	erase();
-	x_angle = (x_angle + 5) % 360;
-	transforDrawing();
-	redraw();
-}
-
-function xangleM() {
-	erase();
-	x_angle = (x_angle - 5) % 360;
-	transforDrawing();
-	redraw();
-}
-
-function yangleP() {
-	erase();
-	y_angle = (y_angle + 5) % 360;
-	transforDrawing();
-	redraw();
-}
-
-function yangleM() {
-	erase();
-	y_angle = (y_angle - 5) % 360;
-	transforDrawing();
-	redraw();
-}
-
-function zangleP() {
-	erase();
-	erase();
-	erase();
-	erase();
-	z_angle = (z_angle + 5);
-	transforDrawing();
-	for (var i = 0; i < 10000; i++) {
-		console.log("i");
-	}
-	redraw();
-}
-
-function zangleM() {
-	erase();
-	z_angle = (z_angle - 5);
-	transforDrawing();
-	redraw();
-}
-
-
-
 function DrawLine(line, color) {
 	if (color == "#000000") {
 		ctx.strokeStyle="#000000";
@@ -117,6 +71,16 @@ function DrawLine(line, color) {
 function Line (p1, p2) {
     this.p1 = p1;
     this.p2 = p2;
+}
+
+function DrawOrigin() {
+	ctx.moveTo(0,150);
+	ctx.lineTo(300,150);
+	ctx.stroke();
+
+	ctx.moveTo(150,0);
+	ctx.lineTo(150,300);
+	ctx.stroke();
 }
 
 function Point3 (x, y, z) {
