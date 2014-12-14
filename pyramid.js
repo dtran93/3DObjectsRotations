@@ -2,72 +2,117 @@ var x_angle = 0;
 var y_angle = 0;
 var z_angle = 0;
 
-var cc; 
-var ctx;
+var ccTetra; 
+var ctxTetra;
+var ccCube;
+var ctxCube;
 
-// var LeftDiag = new Line(new Point3(75, 12.5, 0), new Point3(100, -30.8, 0));
-// var RightDiag = new Line(new Point3(125, 12.5, 0), new Point3(100, -30.8, 0));
-// var Bottom = new Line(new Point3(75, 12.5, 0), new Point3(125, 12.5, 0));
-// var TopToCenter = new Line(new Point3(100, -30.8, 0), new Point3(100, 0, 43.3));
-// var LeftToCenter = new Line(new Point3(75, 12.5, 0), new Point3(100, 0, 43.3));
-// var RightToCenter = new Line(new Point3(125, 12.5, 0), new Point3(100, 0, 43.3));
-
-var linesPyramid;
-var intervalRotation = 100
+var linesTetra;
+var linesCube;
+var intervalRotation = 100;
+var scaleObject = 1.5;
+var rotationSize = 5;
+var coordinateShift = 150;
+var cubeWidth = 40 * scaleObject;
+var colorObject = "#ff0000";
 var timer;
 
-function Reset() {
-	ctx.beginPath();
-	ctx.clearRect ( 0 , 0 , cc.width, cc.height );
-	setLines();
-	redraw();
+function Reset(objectsCanvas, objectsCC) {
+	objectsCanvas = [ctxTetra, ctxCube];
+	objectsCC = [ccTetra, ccCube];
+	for (var i = 0; i < objectsCanvas.length; i++) {
+		objectsCanvas[i].beginPath();
+		objectsCanvas[i].clearRect ( 0 , 0 , objectsCC[i].width, objectsCC[i].height );
+		setLinesTetra();
+		setLinesCube();
+		redrawObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
+	}
 }
 
 function mouseUp() {
 	clearInterval(timer);
 }
 
+window.onload = function() {
+	ccTetra = document.getElementById("CanvasPyramid");
+	ctxTetra = ccTetra.getContext("2d");
+	ccCube = document.getElementById("CanvasCube");
+	ctxCube = ccCube.getContext("2d");
+	setLinesTetra();
+	setLinesCube();
+	redrawObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
+};
+
+function setLinesTetra() {
+	var LeftDiag = new Line(new Point3(-50 * scaleObject, 25 * scaleObject, -43.3 * scaleObject), new Point3(0, -61.6 * scaleObject, -43.3 * scaleObject));
+	var RightDiag = new Line(new Point3(50 * scaleObject, 25 * scaleObject, -43.3 * scaleObject), new Point3(0, -61.6 * scaleObject, -43.3 * scaleObject));
+	var Bottom = new Line(new Point3(-50 * scaleObject, 25 * scaleObject, -43.3 * scaleObject), new Point3(50 * scaleObject, 25 * scaleObject, -43.3 * scaleObject));
+	var TopToCenter = new Line(new Point3(0, -61.6 * scaleObject, -43.3 * scaleObject), new Point3(0, 0, 43.3 * scaleObject));
+	var LeftToCenter = new Line(new Point3(-50 * scaleObject, 25 * scaleObject, -43.3 * scaleObject), new Point3(0, 0, 43.3 * scaleObject));
+	var RightToCenter = new Line(new Point3(50 * scaleObject, 25 * scaleObject, -43.3 * scaleObject), new Point3(0, 0, 43.3 * scaleObject));
+	linesTetra = [LeftDiag, RightDiag, Bottom, TopToCenter, LeftToCenter, RightToCenter];
+}
+
+function setLinesCube() {
+	var TopFront = new Line(new Point3(-cubeWidth, -cubeWidth, cubeWidth), new Point3(cubeWidth, -cubeWidth, cubeWidth));
+	var BottomFront = new Line(new Point3(-cubeWidth, cubeWidth, cubeWidth), new Point3(cubeWidth, cubeWidth, cubeWidth));
+	var LeftFront = new Line(new Point3(-cubeWidth, -cubeWidth, cubeWidth), new Point3(-cubeWidth, cubeWidth, cubeWidth));
+	var RightFront = new Line(new Point3(cubeWidth, -cubeWidth, cubeWidth), new Point3(cubeWidth, cubeWidth, cubeWidth));
+
+	var TopBack = new Line(new Point3(-cubeWidth, -cubeWidth, -cubeWidth), new Point3(cubeWidth, -cubeWidth, -cubeWidth));
+	var BottomBack = new Line(new Point3(-cubeWidth, cubeWidth, -cubeWidth), new Point3(cubeWidth, cubeWidth, -cubeWidth));
+	var LeftBack = new Line(new Point3(-cubeWidth, -cubeWidth, -cubeWidth), new Point3(-cubeWidth, cubeWidth, -cubeWidth));
+	var RightBack = new Line(new Point3(cubeWidth, -cubeWidth, -cubeWidth), new Point3(cubeWidth, cubeWidth, -cubeWidth));
+
+	var TLSide = new Line(new Point3(-cubeWidth, -cubeWidth, cubeWidth), new Point3(-cubeWidth, -cubeWidth, -cubeWidth));
+	var TRSide = new Line(new Point3(cubeWidth, -cubeWidth, cubeWidth), new Point3(cubeWidth, -cubeWidth, -cubeWidth));
+	var BLSide = new Line(new Point3(-cubeWidth, cubeWidth, cubeWidth), new Point3(-cubeWidth, cubeWidth, -cubeWidth));
+	var BRSide = new Line(new Point3(cubeWidth, cubeWidth, cubeWidth), new Point3(cubeWidth, cubeWidth, -cubeWidth));
+
+	linesCube = [TopFront, BottomFront, LeftFront, RightFront, TopBack, BottomBack, LeftBack, RightBack, TLSide, TRSide, BLSide, BRSide];
+}
+
 function XangleP() {
 	timer = setInterval(function(){
-		x_angle = 5;
+		x_angle = rotationSize;
 	    y_angle = 0;
 	    z_angle = 0;
-	    erasePyramid();
-	    transforDrawing();
-	    redraw();
+	    eraseObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
+	    transforDrawing([linesTetra, linesCube]);
+	    redrawObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
 	}, intervalRotation);
 }
 
 function XangleM() {
 	timer = setInterval(function(){
-	    x_angle = -5;
+	    x_angle = -rotationSize;
 	    y_angle = 0;
 	    z_angle = 0;
-	    erasePyramid();
-	    transforDrawing();
-	    redraw();
+	    eraseObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
+	    transforDrawing([linesTetra, linesCube]);
+	    redrawObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
     }, intervalRotation);
 }
 
 function YangleP() {
 	timer = setInterval(function(){
 	    x_angle = 0;
-	    y_angle = 5;
+	    y_angle = rotationSize;
 	    z_angle = 0;
-	    erasePyramid();
-	    transforDrawing();
-	    redraw();
+	    eraseObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
+	    transforDrawing([linesTetra, linesCube]);
+	    redrawObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
     }, intervalRotation);
 }
 
 function YangleM() {
 	timer = setInterval(function(){
 	    x_angle = 0;
-	    y_angle = -5;
+	    y_angle = -rotationSize;
 	    z_angle = 0;
-	    erasePyramid();
-	    transforDrawing();
-	    redraw();
+	    eraseObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
+	    transforDrawing([linesTetra, linesCube]);
+	    redrawObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
     }, intervalRotation);
 }
 
@@ -75,10 +120,10 @@ function ZangleP() {
 	timer = setInterval(function(){
 	    x_angle = 0;
 	    y_angle = 0;
-	    z_angle = 5;
-	    erasePyramid();
-	    transforDrawing();
-	    redraw();
+	    z_angle = rotationSize;
+	    eraseObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
+	    transforDrawing([linesTetra, linesCube]);
+	    redrawObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
     }, intervalRotation);
 }
 
@@ -86,85 +131,73 @@ function ZangleM() {
 	timer = setInterval(function(){
 	    x_angle = 0;
 	    y_angle = 0;
-	    z_angle = -5;
-	    erasePyramid();
-	    transforDrawing();
-	    redraw();
+	    z_angle = -rotationSize;
+	    eraseObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
+	    transforDrawing([linesTetra, linesCube]);
+	    redrawObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
     }, intervalRotation);
 }
 
-
-window.onload = function() {
-	cc = document.getElementById("Canvas");
-	ctx = cc.getContext("2d");
-	setLines();
-	redraw();
-};
-
-function setLines() {
-	var LeftDiag = new Line(new Point3(-50, 25, 0), new Point3(0, -61.6, 0));
-	var RightDiag = new Line(new Point3(50, 25, 0), new Point3(0, -61.6, 0));
-	var Bottom = new Line(new Point3(-50, 25, 0), new Point3(50, 25, 0));
-	var TopToCenter = new Line(new Point3(0, -61.6, 0), new Point3(0, 0, 86.6));
-	var LeftToCenter = new Line(new Point3(-50, 25, 0), new Point3(0, 0, 86.6));
-	var RightToCenter = new Line(new Point3(50, 25, 0), new Point3(0, 0, 86.6));
-	linesPyramid = [LeftDiag, RightDiag, Bottom, TopToCenter, LeftToCenter, RightToCenter];
+function eraseObject(objectsTranform ,objectsCanvas) {
+	for (var i = 0; i < objectsCanvas.length; i++) {
+		for (var j = 0; j < objectsTranform[i].length; j++) {
+			objectsCanvas[i].beginPath();
+			objectsCanvas[i].strokeStyle="#ffffff";
+			objectsCanvas[i].moveTo(objectsTranform[i][j].p1.x_pos + coordinateShift, objectsTranform[i][j].p1.y_pos + coordinateShift);
+			objectsCanvas[i].lineTo(objectsTranform[i][j].p2.x_pos + coordinateShift, objectsTranform[i][j].p2.y_pos + coordinateShift);
+			objectsCanvas[i].stroke();
+			objectsCanvas[i].moveTo(objectsTranform[i][j].p1.x_pos + coordinateShift, objectsTranform[i][j].p1.y_pos + coordinateShift);
+			objectsCanvas[i].lineTo(objectsTranform[i][j].p2.x_pos + coordinateShift, objectsTranform[i][j].p2.y_pos + coordinateShift);
+			objectsCanvas[i].stroke();
+			objectsCanvas[i].moveTo(objectsTranform[i][j].p1.x_pos + coordinateShift, objectsTranform[i][j].p1.y_pos + coordinateShift);
+			objectsCanvas[i].lineTo(objectsTranform[i][j].p2.x_pos + coordinateShift, objectsTranform[i][j].p2.y_pos + coordinateShift);
+			objectsCanvas[i].stroke();
+		}
+	}	
 }
 
-function redraw() {
-	DrawOrigin();
-	ctx.beginPath();
-	for (var i = 0; i < linesPyramid.length; i++) {
-		DrawLine(linesPyramid[i]);
+function redrawObject(objectsTranform, objectsCanvas) {
+	for (var i = 0; i < objectsCanvas.length; i++) {
+		DrawOrigin(objectsCanvas[i]);
+		objectsCanvas[i].beginPath();
+		for (var j = 0; j < objectsTranform[i].length; j++) {
+			DrawLine(objectsTranform[i][j], objectsCanvas[i], colorObject);
+		}
 	}
 }
 
-function transforDrawing() {
-	for (var i = 0; i < linesPyramid.length; i++) {
-		LineRotation(linesPyramid[i]);
+function transforDrawing(objectsTranform) {
+	for (var i = 0; i < objectsTranform.length; i++) {
+		for (var j = 0; j < objectsTranform[i].length; j++) {
+			LineRotation(objectsTranform[i][j]);
+		}
 	}
 }
 
-function erasePyramid() {
-	for (var i = 0; i < linesPyramid.length; i++) {
-		ctx.beginPath();
-		ctx.strokeStyle="#ffffff";
-		ctx.moveTo(linesPyramid[i].p1.x_pos + 150,linesPyramid[i].p1.y_pos + 150);
-		ctx.lineTo(linesPyramid[i].p2.x_pos + 150,linesPyramid[i].p2.y_pos + 150);
-		ctx.stroke();
-		ctx.moveTo(linesPyramid[i].p1.x_pos + 150,linesPyramid[i].p1.y_pos + 150);
-		ctx.lineTo(linesPyramid[i].p2.x_pos + 150,linesPyramid[i].p2.y_pos + 150);
-		ctx.stroke();
-		ctx.moveTo(linesPyramid[i].p1.x_pos + 150,linesPyramid[i].p1.y_pos + 150);
-		ctx.lineTo(linesPyramid[i].p2.x_pos + 150,linesPyramid[i].p2.y_pos + 150);
-		ctx.stroke();
-	}
+function DrawLine(line, canvas, color) {
+	canvas.strokeStyle=color;
+	canvas.moveTo(line.p1.x_pos + coordinateShift,line.p1.y_pos + coordinateShift);
+	canvas.lineTo(line.p2.x_pos + coordinateShift,line.p2.y_pos + coordinateShift);
+	canvas.stroke();
 }
 
-function DrawLine(line) {
-	ctx.strokeStyle="#ff0000";
-	ctx.moveTo(line.p1.x_pos + 150,line.p1.y_pos + 150);
-	ctx.lineTo(line.p2.x_pos + 150,line.p2.y_pos + 150);
-	ctx.stroke();
-}
-
-function Line (p1, p2) {
+function Line(p1, p2) {
     this.p1 = p1;
     this.p2 = p2;
 }
 
-function DrawOrigin() {
+function DrawOrigin(canvas) {
 	// bug need to chop of line or it will change all the lines' colors
-	ctx.beginPath();
-	ctx.strokeStyle="#000000";
+	canvas.beginPath();
+	canvas.strokeStyle="#000000";
 
-	ctx.moveTo(0,150);
-	ctx.lineTo(300,150);
-	ctx.stroke();
+	canvas.moveTo(0,coordinateShift);
+	canvas.lineTo(coordinateShift * 2,coordinateShift);
+	canvas.stroke();
 
-	ctx.moveTo(150,0);
-	ctx.lineTo(150,300);
-	ctx.stroke();
+	canvas.moveTo(coordinateShift,0);
+	canvas.lineTo(coordinateShift,coordinateShift * 2);
+	canvas.stroke();
 }
 
 function Point3 (x, y, z) {
