@@ -11,7 +11,7 @@ var intervalRotation = 100;
 var scaleObject = 1.5;
 var rotationSize = 5;
 var coordinateShift = 150;
-var cubeWidth = 40 * scaleObject;
+var cubeWidth = 40;
 var colorObject = "#ff0000";
 var timer;
 
@@ -20,7 +20,7 @@ var y_angle = 0;
 var z_angle = 0;
 
 // Clear and redraw original positions
-function Reset(objectsCanvas, objectsCC) {
+function Reset() {
 	objectsCanvas = [ctxTetra, ctxCube];
 	objectsCC = [ccTetra, ccCube];
 	for (var i = 0; i < objectsCanvas.length; i++) {
@@ -59,26 +59,38 @@ function setLinesTetra() {
 
 // initialize cube object
 function setLinesCube() {
-	var TopFront = new Line(new Point3(-cubeWidth, -cubeWidth, cubeWidth), new Point3(cubeWidth, -cubeWidth, cubeWidth));
-	var BottomFront = new Line(new Point3(-cubeWidth, cubeWidth, cubeWidth), new Point3(cubeWidth, cubeWidth, cubeWidth));
-	var LeftFront = new Line(new Point3(-cubeWidth, -cubeWidth, cubeWidth), new Point3(-cubeWidth, cubeWidth, cubeWidth));
-	var RightFront = new Line(new Point3(cubeWidth, -cubeWidth, cubeWidth), new Point3(cubeWidth, cubeWidth, cubeWidth));
+	var TopFront = new Line(new Point3(-cubeWidth * scaleObject, -cubeWidth * scaleObject, cubeWidth * scaleObject), new Point3(cubeWidth * scaleObject, -cubeWidth * scaleObject, cubeWidth * scaleObject));
+	var BottomFront = new Line(new Point3(-cubeWidth * scaleObject, cubeWidth * scaleObject, cubeWidth * scaleObject), new Point3(cubeWidth * scaleObject, cubeWidth * scaleObject, cubeWidth * scaleObject));
+	var LeftFront = new Line(new Point3(-cubeWidth * scaleObject, -cubeWidth * scaleObject, cubeWidth * scaleObject), new Point3(-cubeWidth * scaleObject, cubeWidth * scaleObject, cubeWidth * scaleObject));
+	var RightFront = new Line(new Point3(cubeWidth * scaleObject, -cubeWidth * scaleObject, cubeWidth * scaleObject), new Point3(cubeWidth * scaleObject, cubeWidth * scaleObject, cubeWidth * scaleObject));
 
-	var TopBack = new Line(new Point3(-cubeWidth, -cubeWidth, -cubeWidth), new Point3(cubeWidth, -cubeWidth, -cubeWidth));
-	var BottomBack = new Line(new Point3(-cubeWidth, cubeWidth, -cubeWidth), new Point3(cubeWidth, cubeWidth, -cubeWidth));
-	var LeftBack = new Line(new Point3(-cubeWidth, -cubeWidth, -cubeWidth), new Point3(-cubeWidth, cubeWidth, -cubeWidth));
-	var RightBack = new Line(new Point3(cubeWidth, -cubeWidth, -cubeWidth), new Point3(cubeWidth, cubeWidth, -cubeWidth));
+	var TopBack = new Line(new Point3(-cubeWidth * scaleObject, -cubeWidth * scaleObject, -cubeWidth * scaleObject), new Point3(cubeWidth * scaleObject, -cubeWidth * scaleObject, -cubeWidth * scaleObject));
+	var BottomBack = new Line(new Point3(-cubeWidth * scaleObject, cubeWidth * scaleObject, -cubeWidth * scaleObject), new Point3(cubeWidth * scaleObject, cubeWidth * scaleObject, -cubeWidth * scaleObject));
+	var LeftBack = new Line(new Point3(-cubeWidth * scaleObject, -cubeWidth * scaleObject, -cubeWidth * scaleObject), new Point3(-cubeWidth * scaleObject, cubeWidth * scaleObject, -cubeWidth * scaleObject));
+	var RightBack = new Line(new Point3(cubeWidth * scaleObject, -cubeWidth * scaleObject, -cubeWidth * scaleObject), new Point3(cubeWidth * scaleObject, cubeWidth * scaleObject, -cubeWidth * scaleObject));
 
-	var TLSide = new Line(new Point3(-cubeWidth, -cubeWidth, cubeWidth), new Point3(-cubeWidth, -cubeWidth, -cubeWidth));
-	var TRSide = new Line(new Point3(cubeWidth, -cubeWidth, cubeWidth), new Point3(cubeWidth, -cubeWidth, -cubeWidth));
-	var BLSide = new Line(new Point3(-cubeWidth, cubeWidth, cubeWidth), new Point3(-cubeWidth, cubeWidth, -cubeWidth));
-	var BRSide = new Line(new Point3(cubeWidth, cubeWidth, cubeWidth), new Point3(cubeWidth, cubeWidth, -cubeWidth));
+	var TLSide = new Line(new Point3(-cubeWidth * scaleObject, -cubeWidth * scaleObject, cubeWidth * scaleObject), new Point3(-cubeWidth * scaleObject, -cubeWidth * scaleObject, -cubeWidth * scaleObject));
+	var TRSide = new Line(new Point3(cubeWidth * scaleObject, -cubeWidth * scaleObject, cubeWidth * scaleObject), new Point3(cubeWidth * scaleObject, -cubeWidth * scaleObject, -cubeWidth * scaleObject));
+	var BLSide = new Line(new Point3(-cubeWidth * scaleObject, cubeWidth * scaleObject, cubeWidth * scaleObject), new Point3(-cubeWidth * scaleObject, cubeWidth * scaleObject, -cubeWidth * scaleObject));
+	var BRSide = new Line(new Point3(cubeWidth * scaleObject, cubeWidth * scaleObject, cubeWidth * scaleObject), new Point3(cubeWidth * scaleObject, cubeWidth * scaleObject, -cubeWidth * scaleObject));
 
 	linesCube = [TopFront, BottomFront, LeftFront, RightFront, TopBack, BottomBack, LeftBack, RightBack, TLSide, TRSide, BLSide, BRSide];
 }
 
 /*****************************************************Action Events**************************************************************************/
 /********************************************************************************************************************************************/
+
+// Make objects bigger
+function Bigger() {
+	scaleObject += 0.1;
+	Reset();
+}
+
+// Make objects Smaller
+function Smaller() {
+	scaleObject -= 0.1;
+	Reset();
+}
 
 // release interval stop timer
 function mouseUp() {
