@@ -1,6 +1,4 @@
-var x_angle = 0;
-var y_angle = 0;
-var z_angle = 0;
+
 
 var ccTetra; 
 var ctxTetra;
@@ -17,6 +15,11 @@ var cubeWidth = 40 * scaleObject;
 var colorObject = "#ff0000";
 var timer;
 
+var x_angle = 0;
+var y_angle = 0;
+var z_angle = 0;
+
+// Clear and redraw original positions
 function Reset(objectsCanvas, objectsCC) {
 	objectsCanvas = [ctxTetra, ctxCube];
 	objectsCC = [ccTetra, ccCube];
@@ -29,10 +32,7 @@ function Reset(objectsCanvas, objectsCC) {
 	}
 }
 
-function mouseUp() {
-	clearInterval(timer);
-}
-
+// setup
 window.onload = function() {
 	ccTetra = document.getElementById("CanvasPyramid");
 	ctxTetra = ccTetra.getContext("2d");
@@ -43,6 +43,10 @@ window.onload = function() {
 	redrawObject([linesTetra, linesCube], [ctxTetra, ctxCube]);
 };
 
+/*****************************************************Initialize Objects*********************************************************************/
+/********************************************************************************************************************************************/
+
+// initialize Tetra object
 function setLinesTetra() {
 	var LeftDiag = new Line(new Point3(-50 * scaleObject, 25 * scaleObject, -43.3 * scaleObject), new Point3(0, -61.6 * scaleObject, -43.3 * scaleObject));
 	var RightDiag = new Line(new Point3(50 * scaleObject, 25 * scaleObject, -43.3 * scaleObject), new Point3(0, -61.6 * scaleObject, -43.3 * scaleObject));
@@ -53,6 +57,7 @@ function setLinesTetra() {
 	linesTetra = [LeftDiag, RightDiag, Bottom, TopToCenter, LeftToCenter, RightToCenter];
 }
 
+// initialize cube object
 function setLinesCube() {
 	var TopFront = new Line(new Point3(-cubeWidth, -cubeWidth, cubeWidth), new Point3(cubeWidth, -cubeWidth, cubeWidth));
 	var BottomFront = new Line(new Point3(-cubeWidth, cubeWidth, cubeWidth), new Point3(cubeWidth, cubeWidth, cubeWidth));
@@ -72,6 +77,15 @@ function setLinesCube() {
 	linesCube = [TopFront, BottomFront, LeftFront, RightFront, TopBack, BottomBack, LeftBack, RightBack, TLSide, TRSide, BLSide, BRSide];
 }
 
+/*****************************************************Action Events**************************************************************************/
+/********************************************************************************************************************************************/
+
+// release interval stop timer
+function mouseUp() {
+	clearInterval(timer);
+}
+
+// rotate around x axis
 function XangleP() {
 	timer = setInterval(function(){
 		x_angle = rotationSize;
@@ -83,6 +97,7 @@ function XangleP() {
 	}, intervalRotation);
 }
 
+// rotate around x axis opposite of XangleP
 function XangleM() {
 	timer = setInterval(function(){
 	    x_angle = -rotationSize;
@@ -94,6 +109,7 @@ function XangleM() {
     }, intervalRotation);
 }
 
+// rotate around y axis
 function YangleP() {
 	timer = setInterval(function(){
 	    x_angle = 0;
@@ -105,6 +121,7 @@ function YangleP() {
     }, intervalRotation);
 }
 
+// rotate around y axis opposite of YangleP
 function YangleM() {
 	timer = setInterval(function(){
 	    x_angle = 0;
@@ -116,6 +133,7 @@ function YangleM() {
     }, intervalRotation);
 }
 
+// rotate around z axis
 function ZangleP() {
 	timer = setInterval(function(){
 	    x_angle = 0;
@@ -127,6 +145,7 @@ function ZangleP() {
     }, intervalRotation);
 }
 
+// rotate around z axis opposite of ZangleP
 function ZangleM() {
 	timer = setInterval(function(){
 	    x_angle = 0;
@@ -138,6 +157,7 @@ function ZangleM() {
     }, intervalRotation);
 }
 
+// erase old object orientation
 function eraseObject(objectsTranform ,objectsCanvas) {
 	for (var i = 0; i < objectsCanvas.length; i++) {
 		for (var j = 0; j < objectsTranform[i].length; j++) {
@@ -156,6 +176,7 @@ function eraseObject(objectsTranform ,objectsCanvas) {
 	}	
 }
 
+// redraw object after transformation
 function redrawObject(objectsTranform, objectsCanvas) {
 	for (var i = 0; i < objectsCanvas.length; i++) {
 		DrawOrigin(objectsCanvas[i]);
@@ -166,6 +187,7 @@ function redrawObject(objectsTranform, objectsCanvas) {
 	}
 }
 
+// rotate object
 function transforDrawing(objectsTranform) {
 	for (var i = 0; i < objectsTranform.length; i++) {
 		for (var j = 0; j < objectsTranform[i].length; j++) {
@@ -174,6 +196,7 @@ function transforDrawing(objectsTranform) {
 	}
 }
 
+// Draws a given line on to given canvas with given color
 function DrawLine(line, canvas, color) {
 	canvas.strokeStyle=color;
 	canvas.moveTo(line.p1.x_pos + coordinateShift,line.p1.y_pos + coordinateShift);
@@ -181,11 +204,7 @@ function DrawLine(line, canvas, color) {
 	canvas.stroke();
 }
 
-function Line(p1, p2) {
-    this.p1 = p1;
-    this.p2 = p2;
-}
-
+// Draw X, Y axis
 function DrawOrigin(canvas) {
 	// bug need to chop of line or it will change all the lines' colors
 	canvas.beginPath();
@@ -200,17 +219,26 @@ function DrawOrigin(canvas) {
 	canvas.stroke();
 }
 
+// 3D point constructor
 function Point3 (x, y, z) {
     this.x_pos = x;
     this.y_pos = y;
     this.z_pos = z;
 }
 
+// two point line constructor
+function Line(p1, p2) {
+    this.p1 = p1;
+    this.p2 = p2;
+}
+
+// Rotates a line around x,y,z axis by specified angles x,y,z
 function LineRotation(line) {
 	PointRotation(line.p1);
 	PointRotation(line.p2);
 }
 
+// rotate point p by specified angles x,y,z
 function PointRotation(p) {
 	var x_copy = p.x_pos;
 	var y_copy = p.y_pos;
