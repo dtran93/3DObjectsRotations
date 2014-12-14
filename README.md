@@ -1,4 +1,4 @@
-3Dpyramid
+3DObjectsRotations
 =========
 
-3D Pyramid Using Euler Angles
+3D Object Rotations Using Euler Angles
