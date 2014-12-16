@@ -1,5 +1,3 @@
-
-
 var ccTetra; 
 var ctxTetra;
 var ccCube;
